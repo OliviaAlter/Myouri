@@ -2,10 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\Modules",
-    "\\Properties",
     "\\Services",
     "\\Utilities"
   ],
-  "SelectedNode": "\\Program.cs",
+  "SelectedNode": "\\DiscordBot.sln",
   "PreviewInSolutionExplorer": false
 }
