@@ -179,6 +179,17 @@ namespace DiscordBot.Extension
                 .WithColor(new Color(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor()));
             await logChannel.SendMessageAsync(embed: builder.Build());
         }
+        public static async Task UserVoicejumped(IUser user, IVoiceChannel channelBefore, IVoiceChannel channelAfter, IMessageChannel logChannel)
+        {
+            var builder = new EmbedBuilder()
+                .WithThumbnailUrl(user.GetAvatarUrl() ?? user.GetDefaultAvatarUrl())
+                .WithTitle("User voice activity")
+                .WithDescription($"{user.Mention} jumped from voice channel <#{channelBefore.Id}> to voice channel <#{channelAfter.Id}>!")
+                .WithFooter($"{user.Username}", user.GetAvatarUrl() ?? user.GetDefaultAvatarUrl())
+                .WithCurrentTimestamp()
+                .WithColor(new Color(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor()));
+            await logChannel.SendMessageAsync(embed: builder.Build());
+        }
 
         public static async Task UserVoiceLeft(IUser user, IVoiceChannel channel, IMessageChannel logChannel)
         {

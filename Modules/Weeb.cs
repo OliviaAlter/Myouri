@@ -10,6 +10,7 @@ using DiscordBot.Extension;
 using DiscordBot.Services;
 using DiscordBot.Utilities;
 using JikanDotNet;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static System.DateTime;
 
 namespace DiscordBot.Modules
@@ -196,6 +197,8 @@ namespace DiscordBot.Modules
 
 
         [Command("a", RunMode = RunMode.Async)]
+        [Summary("")]
+        [Description("")]
         [Alias("anime", "ani")]
         [RequireBotPermission(GuildPermission.SendMessages)]
         public async Task FetchAnime([Remainder] string query)
@@ -314,5 +317,8 @@ namespace DiscordBot.Modules
                 await PagedReplyAsync(paginatedMessage, new ReactionList());
             }
         }
+
+        //[Command("char")]
+
     }
 }

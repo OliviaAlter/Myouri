@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using DatabaseEntity;
 using Discord;
@@ -16,6 +19,7 @@ using DiscordBot.Model;
 using DiscordBot.Services;
 using DiscordBot.Utilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DiscordBot.Modules
 {
@@ -27,13 +31,18 @@ namespace DiscordBot.Modules
         private readonly CommandService _commands;
         private readonly ImageService _imageService;
         private readonly Servers _servers;
+        private readonly HttpClientService _httpClientService;
+        private readonly HttpClient _httpClient;
 
-        public General(CommandService commands, Servers servers, DiscordSocketClient client, ImageService imageService)
+        public General(CommandService commands, Servers servers, DiscordSocketClient client, ImageService imageService,
+            HttpClientService httpClientService, HttpClient httpClient)
         {
             _commands = commands;
             _servers = servers;
             _client = client;
             _imageService = imageService;
+            _httpClientService = httpClientService;
+            _httpClient = httpClient;
         }
 
         [Command("image", RunMode = RunMode.Async)]
@@ -55,7 +64,7 @@ namespace DiscordBot.Modules
             );
         }
 
-        
+
         /*[Command("snipe", true, RunMode = RunMode.Async)]
         public async Task SnipeMessage()
         {
@@ -65,7 +74,7 @@ namespace DiscordBot.Modules
                 
             }
         }*/
-        
+
 
         [Command("ping", true, RunMode = RunMode.Async)]
         [Summary("Get bot latency in ms")]
@@ -275,7 +284,7 @@ namespace DiscordBot.Modules
                                   Context.Client.CurrentUser.GetDefaultAvatarUrl())
                 .WithColor(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor())
                 .AddField("Here is my invite link ! ",
-                    "https://discord.com/api/oauth2/authorize?client_id=526256077440942122&permissions=8&scope=bot",
+                    "[Click here](https://discord.com/api/oauth2/authorize?client_id=526256077440942122&permissions=8&scope=bot)",
                     true)
                 .WithAuthor(Context.User)
                 .WithColor(new Color(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor()));
@@ -286,9 +295,13 @@ namespace DiscordBot.Modules
         [Alias("funny")]
         public async Task Joke()
         {
-            var http = new HttpClient();
+            var result = await _httpClient.GetStringAsync("https://sv443.net/jokeapi/v2/joke/Any?type=single");
 
-            var result = await http.GetStringAsync("https://sv443.net/jokeapi/v2/joke/Any?type=single");
+            if (Equals(result, "error"))
+            {
+                await Context.Channel.SendErrorAsync("Error", "There is something wrong while accessing the website!");
+                return;
+            }
 
             var jokeDeserialize = JsonConvert.DeserializeObject<JokeModel>(result);
 
@@ -302,31 +315,64 @@ namespace DiscordBot.Modules
             await ReplyAsync(embed: embed.Build());
         }
 
-        [Command("api", RunMode = RunMode.Async)]
-        [Alias("x")]
-        public async Task TestAPI()
+        [Command("donald", RunMode = RunMode.Async)]
+        [Alias("dump")]
+        public async Task DTrump()
         {
-            var http = new HttpClient();
+            var value = await GetRandom();
 
-            var result = await http.GetStringAsync("https://api.nitrado.net/ping");
+            StringBuilder sb = new StringBuilder();
+            foreach (var tag in value.Tags)
+            {
+                sb.Append($"{tag}, ");
+            }
 
-            //var jokeDeserialize = JsonConvert.DeserializeObject<Model.JokeModel>(result);
-
-            var pingDeserialize = JsonConvert.DeserializeObject<TestModel.PingCheck>(result);
-            var embed = new EmbedBuilder()
-                .AddField("Status : ", pingDeserialize.status)
-                .AddField("Status : ", pingDeserialize.message);
-            await ReplyAsync(embed: embed.Build());
-            /*
-            var embed = new EmbedBuilder { Title = "This is just a joke" };
+            var embed = new EmbedBuilder {Title = $"Quote from Tronald !"};
             embed
                 .WithColor(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor())
-                .AddField("Context", jokeDeserialize.Joke)
-                .AddField("Category", jokeDeserialize.Category, true)
+                .AddField("Context", value.Value)
+                .AddField("Tag", sb)
                 .WithAuthor(Context.User)
-                .WithFooter("Powered by sv443.net");
+                .WithFooter("Powered by tronalddump.io");
             await ReplyAsync(embed: embed.Build());
-            */
+        }
+
+        public async Task<Root> GetRandom()
+        {
+            return await _httpClientService.GetWithHostAsync<Root>("https://tronalddump.io/random/quote",
+                "tronalddump.io");
+        }
+
+        [Command("def", RunMode = RunMode.Async)]
+        [Alias("wd")]
+        public async Task WordDefinition(string language, [Remainder] string phase)
+        {
+            try
+            {
+                var result = await 
+                    _httpClient.GetStringAsync("https://api.dictionaryapi.dev/api/v2/entries/"+$"{language}"+$"/{phase}");
+                //var dictionaryWord = JsonConvert.DeserializeObject<WordDefinition>(result);
+                var dictionaryDeserialize = JsonConvert.DeserializeObject<IEnumerable<MyArray>>(result);
+                await Context.Channel.SendMessageAsync(dictionaryDeserialize.ToString());
+                /*
+                var embed = new EmbedBuilder { Title = $"Definition for {phase}" };
+                embed
+                    .WithColor(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor())
+                    .AddField("Definition", wordDefinitions.Find())
+                    .AddField("Text", dictionaryTextDeserialize.Text)
+                    .AddField("Example", dictionaryWord.Example)
+                    .AddField("Synonyms", sb)
+                    .WithAuthor(Context.User)
+                    .WithFooter("Powered by dictionaryapi.dev");
+                await ReplyAsync(embed: embed.Build());
+                */
+            }
+            catch (Exception e)
+            {
+                await ReplyAsync($"{e}");
+                await Context.Channel.SendErrorAsync("Error", "We can't process that!");
+            }
+
         }
     }
 }

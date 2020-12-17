@@ -944,11 +944,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\innoc\\OneDrive\\Documents\\GitHub\\DiscordBot\\Infrastructure\\DatabaseEntity.csproj",
+      "projectUniqueName": "C:\\Users\\innoc\\OneDrive\\Documents\\GitHub\\Myouri\\Infrastructure\\DatabaseEntity.csproj",
       "projectName": "DatabaseEntity",
-      "projectPath": "C:\\Users\\innoc\\OneDrive\\Documents\\GitHub\\DiscordBot\\Infrastructure\\DatabaseEntity.csproj",
+      "projectPath": "C:\\Users\\innoc\\OneDrive\\Documents\\GitHub\\Myouri\\Infrastructure\\DatabaseEntity.csproj",
       "packagesPath": "C:\\Users\\innoc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\innoc\\OneDrive\\Documents\\GitHub\\DiscordBot\\Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\innoc\\OneDrive\\Documents\\GitHub\\Myouri\\Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\innoc\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -965,6 +965,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -976,6 +977,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
@@ -1007,7 +1009,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

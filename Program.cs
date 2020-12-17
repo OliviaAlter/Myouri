@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using DatabaseEntity;
 using Discord;
@@ -15,7 +16,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NHentai.NET.Client;
 using NHentai.NET.Helpers;
 using OpenDotaDotNet;
 
@@ -65,8 +65,8 @@ namespace DiscordBot
                 {
                     services
                         .AddHostedService<CommandHandler>()
-                        //.AddDbContext<Database>()
-                        .AddDbContext<Database>(options => options.UseMySql(context.Configuration["database"]))
+                        .AddDbContext<Database>()
+                        //.AddDbContext<Database>(options => options.UseMySql(context.Configuration["database"]))
                         .AddSingleton<Servers>()
                         .AddSingleton<Ranks>()
                         .AddSingleton<Users>()
@@ -80,6 +80,8 @@ namespace DiscordBot
                         .AddSingleton<SteamClient>()
                         .AddSingleton<ScreenshotService>()
                         .AddSingleton<TableExtension>()
+                        .AddSingleton<HttpClientService>()
+                        .AddSingleton<HttpClient>()
                         .AddHentaiClient()
                         /*
                         .AddLavaNode(x =>

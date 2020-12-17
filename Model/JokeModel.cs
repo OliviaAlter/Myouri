@@ -1,11 +1,17 @@
-﻿namespace DiscordBot.Model
+﻿using System;
+
+namespace DiscordBot.Model
 {
-    public class JokeModel
+    public class JokeModel : IEquatable<JokeModel>
     {
         public string Category { get; set; }
         public string Joke { get; set; }
         public string Lang { get; set; }
         public Flags Flags { get; set; }
+        public bool Equals(JokeModel other)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Flags

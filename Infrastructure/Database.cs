@@ -4,19 +4,20 @@ namespace DatabaseEntity
 {
     public class Database : DbContext
     {
-        
+        /*
         public Database(DbContextOptions<Database> options)
             : base(options)
         {
         }
+        */
         
         public DbSet<Server> Servers { get; set; }
         public DbSet<Rank> Ranks { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Autorole> Autoroles { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //    => options.UseMySql("Server=localhost;User=root;database=Discord;port=3306;Connect Timeout=5");
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+            => options.UseMySql("Server=localhost;User=root;database=Discord;port=3306;Connect Timeout=5");
     }
 
     public class Server

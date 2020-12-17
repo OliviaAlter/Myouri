@@ -78,6 +78,8 @@ namespace DiscordBot.Services
             await _service.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);
         }
 
+      
+
         private static async Task OnUserIsTyping(SocketUser u, ISocketMessageChannel m)
         {
             var random = new Random().Next(0, 10);
@@ -165,11 +167,14 @@ namespace DiscordBot.Services
             var guildId = await _servers.GetUserLogChannel(((SocketGuildUser) user).Guild.Id);
             if (!(_client.GetChannel(guildId) is ISocketMessageChannel messageChannel)) return;
             if (!Equals(voiceStateBefore.VoiceChannel, voiceStateAfter.VoiceChannel) &&
-                voiceStateAfter.VoiceChannel != null)
+                voiceStateAfter.VoiceChannel != null && voiceStateBefore.VoiceChannel == null)
                 await EventExtension.UserVoiceJoined(user, voiceStateAfter.VoiceChannel, messageChannel);
             else if (!Equals(voiceStateAfter.VoiceChannel, voiceStateBefore.VoiceChannel) &&
-                     voiceStateBefore.VoiceChannel != null)
+                     voiceStateBefore.VoiceChannel != null && voiceStateAfter.VoiceChannel == null)
                 await EventExtension.UserVoiceLeft(user, voiceStateBefore.VoiceChannel, messageChannel);
+            else if (!Equals(voiceStateAfter.VoiceChannel, voiceStateBefore.VoiceChannel) &&
+                     voiceStateBefore.VoiceChannel != null && voiceStateAfter.VoiceChannel != null)
+                await EventExtension.UserVoicejumped(user, voiceStateBefore.VoiceChannel, voiceStateAfter.VoiceChannel, messageChannel);
         }
 
         private async Task OnChannelCreated(SocketChannel channel)

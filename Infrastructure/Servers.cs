@@ -303,8 +303,8 @@ namespace DatabaseEntity
         }
         #endregion
 
-        #region Disable/Enable mention per message
-        public async Task<string> GetGuildMessageMention(ulong id)
+        #region Disable/Enable user mention per message
+        public async Task<string> GetGuildMessageMentionUser(ulong id)
         {
             var prefix = await _context.Servers
                 .Where(x => x.Id == id)
@@ -313,7 +313,7 @@ namespace DatabaseEntity
             return await Task.FromResult(prefix);
         }
 
-        public async Task<ulong> SetMessageMessageMention(ulong id)
+        public async Task<ulong> SetMessageMessageMentionUser(ulong id)
         {
             var channelId = await _context.Servers
                 .Where(x => x.Id == id)
@@ -322,7 +322,35 @@ namespace DatabaseEntity
             return await Task.FromResult(channelId);
         }
 
-        public async Task RemoveMessageMention(ulong id, ulong channelId)
+        public async Task RemoveMessageMentionUser(ulong id, ulong channelId)
+        {
+            var channel = await _context.Servers
+                .FindAsync(id);
+            channel.UserUpdateChannel = 0;
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
+        #region Disable/Enable role mention per message
+        public async Task<string> GetGuildMessageMentionRole(ulong id)
+        {
+            var prefix = await _context.Servers
+                .Where(x => x.Id == id)
+                .Select(x => x.Prefix)
+                .FirstOrDefaultAsync();
+            return await Task.FromResult(prefix);
+        }
+
+        public async Task<ulong> SetMessageMessageMentionRole(ulong id)
+        {
+            var channelId = await _context.Servers
+                .Where(x => x.Id == id)
+                .Select(x => x.EventLogChannel)
+                .FirstOrDefaultAsync();
+            return await Task.FromResult(channelId);
+        }
+
+        public async Task RemoveMessageMentionRole(ulong id, ulong channelId)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
