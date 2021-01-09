@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +14,8 @@ using static System.DateTime;
 
 namespace DiscordBot.Modules
 {
+    [Summary(":shield:")]
+
     public class nHentai : InteractiveBase<SocketCommandContext>
     {
         //This is client for getting pages 

@@ -46,3 +46,15 @@ C:\Users\innoc\Desktop\DiscordBot-BackUp\DiscordBot\Infrastructure\obj\Debug\net
 C:\Users\innoc\Desktop\DiscordBot-BackUp\DiscordBot\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.pdb
 C:\Users\innoc\Desktop\DiscordBot-BackUp\DiscordBot\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.genruntimeconfig.cache
 C:\Users\innoc\Desktop\DiscordBot-BackUp\DiscordBot\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.csprojAssemblyReference.cache
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\bin\Debug\netcoreapp3.1\DatabaseEntity.deps.json
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\bin\Debug\netcoreapp3.1\DatabaseEntity.runtimeconfig.json
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\bin\Debug\netcoreapp3.1\DatabaseEntity.runtimeconfig.dev.json
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\bin\Debug\netcoreapp3.1\DatabaseEntity.dll
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\bin\Debug\netcoreapp3.1\DatabaseEntity.pdb
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.csprojAssemblyReference.cache
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.AssemblyInfoInputs.cache
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.AssemblyInfo.cs
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.csproj.CoreCompileInputs.cache
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.dll
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.pdb
+C:\Users\innoc\OneDrive\Documents\GitHub\Myouri\Infrastructure\obj\Debug\netcoreapp3.1\DatabaseEntity.genruntimeconfig.cache

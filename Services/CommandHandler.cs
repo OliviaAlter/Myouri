@@ -57,7 +57,7 @@ namespace DiscordBot.Services
             var muteTask = new Task(async () => await MuteHandler());
             muteTask.Start();
 
-            //_client.UserIsTyping += OnUserIsTyping;
+            _client.UserIsTyping += OnUserIsTyping;
             _client.UserBanned += OnUserBanned;
             _client.UserUnbanned += OnUserUnbanned;
 
@@ -287,7 +287,10 @@ namespace DiscordBot.Services
         {
             var guildId = await _servers.GetLeftChannel(leftUser.Guild.Id);
             if (_client.GetChannel(guildId) is ISocketMessageChannel leftChannel)
+            {
+                await EventExtension.UserLeftEmbed(leftUser, leftChannel);
                 await leftChannel.SendMessageAsync($"Good bye {leftUser.Mention}, we will miss you!!");
+            }
         }
 
         private async Task OnUserUnbanned(SocketUser userBanned, SocketGuild guild)

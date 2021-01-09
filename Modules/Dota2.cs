@@ -11,6 +11,8 @@ using OpenDotaDotNet;
 
 namespace DiscordBot.Modules
 {
+    [Summary(":shield:")]
+
     public class Dota2 : InteractiveBase<SocketCommandContext>
     {
         private readonly OpenDotaApi _openDotaApi;

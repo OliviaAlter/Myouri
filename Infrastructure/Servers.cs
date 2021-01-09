@@ -225,6 +225,120 @@ namespace DatabaseEntity
         }
         #endregion
 
+        #region URL welcome 
+        public async Task<ulong> GetWelcomeUrl(ulong id)
+        {
+            var channelId = await _context.Servers
+                .Where(x => x.Id == id)
+                .Select(x => x.UserUpdateChannel)
+                .FirstOrDefaultAsync();
+            return await Task.FromResult(channelId);
+        }
+
+        public async Task SetWelcomeUrl(ulong id, ulong channelId)
+        {
+            var server = await _context.Servers
+                .FindAsync(id);
+            if (server == null) _context.Add(new Server { Id = id, UserUpdateChannel = channelId });
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ModifyWelcomeUrl(ulong id, ulong channelId)
+        {
+            var server = await _context.Servers
+                .FindAsync(id);
+            if (server == null)
+                _context.Add(new Server { Id = id, UserUpdateChannel = channelId });
+            else
+                server.UserUpdateChannel = channelId;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveWelcomeUrl(ulong id, ulong channelId)
+        {
+            var channel = await _context.Servers
+                .FindAsync(id);
+            channel.UserUpdateChannel = 0;
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
+        #region Welcome message
+        public async Task<ulong> GetWelcomeMessage(ulong id)
+        {
+            var channelId = await _context.Servers
+                .Where(x => x.Id == id)
+                .Select(x => x.UserUpdateChannel)
+                .FirstOrDefaultAsync();
+            return await Task.FromResult(channelId);
+        }
+
+        public async Task SetWelcomeMessage(ulong id, ulong channelId)
+        {
+            var server = await _context.Servers
+                .FindAsync(id);
+            if (server == null) _context.Add(new Server { Id = id, UserUpdateChannel = channelId });
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ModifyWelcomeMessage(ulong id, ulong channelId)
+        {
+            var server = await _context.Servers
+                .FindAsync(id);
+            if (server == null)
+                _context.Add(new Server { Id = id, UserUpdateChannel = channelId });
+            else
+                server.UserUpdateChannel = channelId;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveWelcomeMessage(ulong id, ulong channelId)
+        {
+            var channel = await _context.Servers
+                .FindAsync(id);
+            channel.UserUpdateChannel = 0;
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
+        #region Leave message
+        public async Task<ulong> GetLeaveMessage(ulong id)
+        {
+            var channelId = await _context.Servers
+                .Where(x => x.Id == id)
+                .Select(x => x.UserUpdateChannel)
+                .FirstOrDefaultAsync();
+            return await Task.FromResult(channelId);
+        }
+
+        public async Task SetLeaveMessage(ulong id, ulong channelId)
+        {
+            var server = await _context.Servers
+                .FindAsync(id);
+            if (server == null) _context.Add(new Server { Id = id, UserUpdateChannel = channelId });
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ModifyLeaveMessage(ulong id, ulong channelId)
+        {
+            var server = await _context.Servers
+                .FindAsync(id);
+            if (server == null)
+                _context.Add(new Server { Id = id, UserUpdateChannel = channelId });
+            else
+                server.UserUpdateChannel = channelId;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveLeaveMessage(ulong id, ulong channelId)
+        {
+            var channel = await _context.Servers
+                .FindAsync(id);
+            channel.UserUpdateChannel = 0;
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
         #region Guild user mention per message
         public async Task ModifyGuildUserMessageMention(ulong id, string prefix)
         {

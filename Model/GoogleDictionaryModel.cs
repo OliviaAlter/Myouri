@@ -1,5 +1,6 @@
-﻿// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
+﻿// Root myDeserializedClass = JsonSerializer.Deserialize<RootDictionary>(myJsonResponse);
 
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -14,13 +15,20 @@ namespace DiscordBot.Model
         public string Audio { get; set; }
     }
 
-    public class WordDefinition
+    public class WordDefinition 
     {
         [JsonPropertyName("definition")]
         public string Definition { get; set; }
 
         [JsonPropertyName("example")]
         public string Example { get; set; }
+
+        [JsonPropertyName("synonyms")]
+        public List<string> Synonyms { get; set; }
+
+        [JsonPropertyName("antonyms")]
+        public List<string> Antonyms { get; set; }
+
     }
 
     public class Meaning
@@ -30,12 +38,21 @@ namespace DiscordBot.Model
 
         [JsonPropertyName("definitions")]
         public List<WordDefinition> Definitions { get; set; }
-
-        [JsonPropertyName("synonyms")]
-        public List<string> Synonyms { get; set; }
     }
 
-    public class MyArray
+    public class InvalidWord
+    {
+        [JsonPropertyName("title")]
+        public string Title { get; set; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
+
+        [JsonPropertyName("resolution")]
+        public string Resolution { get; set; }
+    }
+
+    public class RootDictionary
     {
         [JsonPropertyName("word")]
         public string Word { get; set; }
@@ -45,11 +62,5 @@ namespace DiscordBot.Model
 
         [JsonPropertyName("meanings")]
         public List<Meaning> Meanings { get; set; }
-    }
-
-    public class RootDictionary
-    {
-        [JsonPropertyName("MyArray")]
-        public List<MyArray> MyArray { get; set; }
     }
 }

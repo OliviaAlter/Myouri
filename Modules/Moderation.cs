@@ -28,10 +28,7 @@ namespace DiscordBot.Modules
             foreach (var toggleUser in channels.Users)
             {
                 if (toggleUser != user) continue;
-                if (user.IsMuted)
-                    await user.ModifyAsync(r => r.Mute = false);
-                else
-                    await user.ModifyAsync(r => r.Mute = true);
+                await user.ModifyAsync(r => r.Mute = !IsMuted(user));
             }
         }
 
@@ -48,10 +45,7 @@ namespace DiscordBot.Modules
             foreach (var toggleUser in channels.Users)
             {
                 if (toggleUser != user) continue;
-                if (user.IsDeafened)
-                    await user.ModifyAsync(r => r.Deaf = false);
-                else
-                    await user.ModifyAsync(r => r.Deaf = true);
+                await user.ModifyAsync(r => r.Deaf = !IsDeafened(user));
             }
         }
 
@@ -326,5 +320,16 @@ namespace DiscordBot.Modules
                 .WithColor(new Color(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor()));
             await ReplyAsync(embed: builder.Build());
         }
+
+        private bool IsMuted(SocketGuildUser user)
+        {
+            return user.IsMuted;
+        }
+
+        private bool IsDeafened(SocketGuildUser user)
+        {
+            return user.IsDeafened;
+        }
+
     }
 }

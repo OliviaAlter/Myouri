@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -19,7 +18,6 @@ using DiscordBot.Model;
 using DiscordBot.Services;
 using DiscordBot.Utilities;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace DiscordBot.Modules
 {
@@ -29,10 +27,10 @@ namespace DiscordBot.Modules
         private const ulong OwnerId = 247742975608750090;
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
+        private readonly HttpClient _httpClient;
+        private readonly HttpClientService _httpClientService;
         private readonly ImageService _imageService;
         private readonly Servers _servers;
-        private readonly HttpClientService _httpClientService;
-        private readonly HttpClient _httpClient;
 
         public General(CommandService commands, Servers servers, DiscordSocketClient client, ImageService imageService,
             HttpClientService httpClientService, HttpClient httpClient)
@@ -63,18 +61,6 @@ namespace DiscordBot.Modules
                     (c, r) => c.Channel.SendMessageAsync($"{r.User.Value.Mention} replied with 👎"))
             );
         }
-
-
-        /*[Command("snipe", true, RunMode = RunMode.Async)]
-        public async Task SnipeMessage()
-        {
-            var messageCache = Context.Channel.CachedMessages.Reverse();
-            foreach (var deleteMessage in messageCache)
-            {
-                
-            }
-        }*/
-
 
         [Command("ping", true, RunMode = RunMode.Async)]
         [Summary("Get bot latency in ms")]
@@ -133,9 +119,10 @@ namespace DiscordBot.Modules
 
         [Command("info", RunMode = RunMode.Async)]
         [Summary("Get your information")]
+        [RequireContext(ContextType.Guild)]
         public async Task Info(SocketGuildUser user = null)
         {
-            user = (SocketGuildUser) (user ?? (IGuildUser) Context.User);
+            user = (SocketGuildUser)(user ?? (IGuildUser)Context.User);
             var builder = new EmbedBuilder();
             builder.WithThumbnailUrl(user.GetAvatarUrl() ?? user.GetDefaultAvatarUrl())
                 .WithDescription($"Basic information about {user.Mention}!")
@@ -164,16 +151,6 @@ namespace DiscordBot.Modules
                 await BotUsage();
             else
                 await Context.Channel.SendErrorAsync("Invalid permission", "That command is for developer only!");
-        }
-
-        private int CountGuilds()
-        {
-            return Context.Client.Guilds.Count;
-        }
-
-        private int CountUsers()
-        {
-            return Context.Client.Guilds.Sum(guild => guild.MemberCount);
         }
 
         [Command("8ball", RunMode = RunMode.Async)]
@@ -305,7 +282,7 @@ namespace DiscordBot.Modules
 
             var jokeDeserialize = JsonConvert.DeserializeObject<JokeModel>(result);
 
-            var embed = new EmbedBuilder {Title = "This is just a joke"};
+            var embed = new EmbedBuilder { Title = "This is just a joke" };
             embed
                 .WithColor(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor())
                 .AddField("Context", jokeDeserialize.Joke)
@@ -321,13 +298,10 @@ namespace DiscordBot.Modules
         {
             var value = await GetRandom();
 
-            StringBuilder sb = new StringBuilder();
-            foreach (var tag in value.Tags)
-            {
-                sb.Append($"{tag}, ");
-            }
+            var sb = new StringBuilder();
+            foreach (var tag in value.Tags) sb.Append($"{tag}, ");
 
-            var embed = new EmbedBuilder {Title = $"Quote from Tronald !"};
+            var embed = new EmbedBuilder { Title = "Quote from Tronald !" };
             embed
                 .WithColor(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor())
                 .AddField("Context", value.Value)
@@ -347,32 +321,105 @@ namespace DiscordBot.Modules
         [Alias("wd")]
         public async Task WordDefinition(string language, [Remainder] string phase)
         {
-            try
+            var response = await _httpClient.GetAsync("https://api.dictionaryapi.dev/api/v2/entries/" + $"{language}" +
+                                                      $"/{phase}");
+            var jsonAsync = await response.Content.ReadAsStringAsync();
+
+            var dictionaryDeserialize = JsonConvert.DeserializeObject<IEnumerable<RootDictionary>>(jsonAsync);
+            var dictionaryInvalidDeserialize = JsonConvert.DeserializeObject<IEnumerable<InvalidWord>>(jsonAsync);
+
+            var rootDictionaries = dictionaryDeserialize.ToList();
+            var rootInvalidDictionaries = dictionaryInvalidDeserialize.ToList();
+
+            IEnumerable<Meaning> meanings = rootDictionaries[0].Meanings.ToList();
+            IEnumerable<Phonetic> phonetics = rootDictionaries[0].Phonetics.ToList();
+
+            var title = rootInvalidDictionaries[0].Title;
+            var message = rootInvalidDictionaries[0].Message;
+            var resolution = rootInvalidDictionaries[0].Resolution;
+
+            var meaning = new StringBuilder();
+            var phonetic = new StringBuilder();
+            var example = new StringBuilder();
+            var synonyms = new StringBuilder();
+            var antonyms = new StringBuilder();
+
+            foreach (var antonymWord in meanings)
             {
-                var result = await 
-                    _httpClient.GetStringAsync("https://api.dictionaryapi.dev/api/v2/entries/"+$"{language}"+$"/{phase}");
-                //var dictionaryWord = JsonConvert.DeserializeObject<WordDefinition>(result);
-                var dictionaryDeserialize = JsonConvert.DeserializeObject<IEnumerable<MyArray>>(result);
-                await Context.Channel.SendMessageAsync(dictionaryDeserialize.ToString());
-                /*
-                var embed = new EmbedBuilder { Title = $"Definition for {phase}" };
-                embed
-                    .WithColor(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor())
-                    .AddField("Definition", wordDefinitions.Find())
-                    .AddField("Text", dictionaryTextDeserialize.Text)
-                    .AddField("Example", dictionaryWord.Example)
-                    .AddField("Synonyms", sb)
-                    .WithAuthor(Context.User)
-                    .WithFooter("Powered by dictionaryapi.dev");
-                await ReplyAsync(embed: embed.Build());
-                */
-            }
-            catch (Exception e)
-            {
-                await ReplyAsync($"{e}");
-                await Context.Channel.SendErrorAsync("Error", "We can't process that!");
+                WordDefinition first = antonymWord.Definitions.FirstOrDefault();
+                if (first?.Antonyms == null) continue;
+                foreach (var antonym in first?.Antonyms)
+                {
+                    antonyms.AppendLine("- " + antonym);
+                }
             }
 
+            foreach (var synonymWord in meanings)
+            {
+                WordDefinition first = synonymWord.Definitions.FirstOrDefault();
+                if (first?.Synonyms == null) continue;
+                foreach (var synonym in first?.Synonyms)
+                {
+                    synonyms.AppendLine("- " + synonym);
+                }
+            }
+
+            foreach (var partOfSpeech in meanings)
+                meaning.AppendLine("- " + partOfSpeech.PartOfSpeech);
+
+            foreach (var definitions in meanings)
+                foreach (var definition in definitions.Definitions)
+                    meaning.AppendLine("- " + definition.Definition);
+
+            foreach (var definitionExample in meanings)
+                foreach (var definition in definitionExample.Definitions)
+                    example.AppendLine("- " + definition.Example);
+
+            foreach (var text in phonetics)
+                phonetic.AppendLine("- " + text.Text);
+
+            var meaningCap = meaning.Length != 0 ? meaning.ToString() : "No meaning";
+            var exampleCap = example.Length != 0 ? example.ToString() : "No example";
+            var phoneticCap = phonetic.Length != 0 ? phonetic.ToString() : "No text";
+            var synonymsCap = synonyms.Length != 0 ? synonyms.ToString() : "No synonyms";
+            var antonymsCap = antonyms.Length != 0 ? antonyms.ToString() : "No antonyms";
+
+            var embed = new EmbedBuilder { Title = $"Definition for {phase}" };
+            embed
+                .WithColor(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor())
+                .WithAuthor(author =>
+                {
+                    author.WithIconUrl("https://image.flaticon.com/icons/png/512/1493/1493308.png")
+                        .WithName("Dictionary");
+                })
+                .WithCurrentTimestamp()
+                .WithFooter("Powered by dictionaryapi.dev");
+            if (meaning.Capacity == 0 && phonetic.Capacity == 0 && example.Capacity == 0 && synonyms.Capacity == 0)
+            {
+                embed.AddField($"{title}", "**Look like you input a wrong word or phase**")
+                    .AddField("Message from us", $"{message}")
+                    .AddField("Resolution", $"{resolution}");
+            }
+            else
+            {
+                embed.AddField("Definition", meaningCap)
+                    .AddField("Text", phoneticCap)
+                    .AddField("Example", exampleCap)
+                    .AddField("Synonyms", synonymsCap)
+                    .AddField("Antonyms", antonymsCap);
+            }
+            await ReplyAsync(embed: embed.Build());
         }
+
+        private int CountGuilds()
+        {
+            return Context.Client.Guilds.Count;
+        }
+
+        private int CountUsers()
+        {
+            return Context.Client.Guilds.Sum(guild => guild.MemberCount);
+        }
+
     }
 }

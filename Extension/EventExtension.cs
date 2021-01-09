@@ -9,6 +9,17 @@ namespace DiscordBot.Extension
 {
     public abstract class EventExtension
     {
+        public static async Task UserLeftEmbed(IUser user, IMessageChannel logChannel)
+        {
+            var builder = new EmbedBuilder()
+                .WithThumbnailUrl(user.GetAvatarUrl() ?? user.GetDefaultAvatarUrl())
+                .WithTitle($"{user.Mention} has left the server")
+                .WithFooter($"{user.Username}", user.GetAvatarUrl() ?? user.GetDefaultAvatarUrl())
+                .WithCurrentTimestamp()
+                .WithColor(new Color(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor()));
+            await logChannel.SendMessageAsync(embed: builder.Build());
+        }
+
         public static async Task MessageUpdatedEmbed(IUser user, IMessageChannel logChannel, IMessageChannel channel,
             string before, SocketMessage after)
         {

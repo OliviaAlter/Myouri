@@ -65,8 +65,8 @@ namespace DiscordBot
                 {
                     services
                         .AddHostedService<CommandHandler>()
-                        .AddDbContext<Database>()
-                        //.AddDbContext<Database>(options => options.UseMySql(context.Configuration["database"]))
+                        //.AddDbContext<Database>()
+                        .AddDbContext<Database>(options => options.UseMySql(context.Configuration["database"]))
                         .AddSingleton<Servers>()
                         .AddSingleton<Ranks>()
                         .AddSingleton<Users>()

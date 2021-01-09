@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using DatabaseEntity;
 using Discord.Commands;
 using DiscordBot.Client;
 using DiscordBot.Discord.Addons.Interactive;
@@ -6,13 +7,17 @@ using DiscordBot.Extension;
 
 namespace DiscordBot.Modules
 {
+    [Summary(":shield:")]
+
     public class Steam : InteractiveBase<SocketCommandContext>
     {
         private readonly SteamClient _steamClient;
+        private readonly User _user;
 
-        public Steam(SteamClient steamClient)
+        public Steam(SteamClient steamClient, User user)
         {
             _steamClient = steamClient;
+            _user = user;
         }
 
         [Command("steam", RunMode = RunMode.Async)]
@@ -31,7 +36,7 @@ namespace DiscordBot.Modules
                     var avatarUrl = await _steamClient.SteamAvatarUrl(steamId);
                     var isTradeBan = await _steamClient.SteamTradeBanState(steamId);
                     var isVacBan = await _steamClient.SteamVacBan(steamId);
-                    var isLimited = await _steamClient.SteamLimitedAccount(steamId);
+                    var isLimited = await _steamClient.SteamLimitedAccount(steamId) ? "Limited" : "No";
                     var nickName = await _steamClient.SteamNickName(steamId);
 
                     await Context.Channel.SendSteamProfile($"Detail steam profile of [{nickName}]",
@@ -49,7 +54,6 @@ namespace DiscordBot.Modules
                 else
                 {
                     var vanityUrlDecoder = await _steamClient.SteamVanityUrl(steamIdentifier);
-
                     var level = await _steamClient.SteamUserLevel(vanityUrlDecoder);
                     var recentGame = await _steamClient.SteamRecentGame(vanityUrlDecoder);
                     var defaultUrl = await _steamClient.SteamProfileUrl(vanityUrlDecoder);
@@ -58,8 +62,8 @@ namespace DiscordBot.Modules
                     var lastLogin = await _steamClient.SteamLastLogin(vanityUrlDecoder);
                     var avatarUrl = await _steamClient.SteamAvatarUrl(vanityUrlDecoder);
                     var isTradeBan = await _steamClient.SteamTradeBanState(vanityUrlDecoder);
-                    var isVacBan = await _steamClient.SteamVacBan(vanityUrlDecoder);
-                    var isLimited = await _steamClient.SteamLimitedAccount(vanityUrlDecoder);
+                    var isVacBan = await _steamClient.SteamVacBan(vanityUrlDecoder) ? "Vac banned" : "Not yet" ;
+                    var isLimited = await _steamClient.SteamLimitedAccount(vanityUrlDecoder) ? "Limited" : "No";
                     var nickName = await _steamClient.SteamNickName(vanityUrlDecoder);
                     var steamVanityId = await _steamClient.SteamId(vanityUrlDecoder);
 
