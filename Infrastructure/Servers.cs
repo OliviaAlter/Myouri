@@ -64,7 +64,7 @@ namespace DatabaseEntity
             await _context.SaveChangesAsync();
         }
        
-        public async Task RemoveEventLogChannel(ulong id, ulong channelId)
+        public async Task RemoveEventLogChannel(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -102,7 +102,7 @@ namespace DatabaseEntity
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveLogMessageChannel(ulong id, ulong channelId)
+        public async Task RemoveLogMessageChannel(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -140,7 +140,7 @@ namespace DatabaseEntity
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveWelcomeChannel(ulong id, ulong channelId)
+        public async Task RemoveWelcomeChannel(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -178,7 +178,7 @@ namespace DatabaseEntity
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveLeftChannel(ulong id, ulong channelId)
+        public async Task RemoveLeftChannel(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -216,7 +216,7 @@ namespace DatabaseEntity
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveUserLogChannel(ulong id, ulong channelId)
+        public async Task RemoveUserLogChannel(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -254,7 +254,7 @@ namespace DatabaseEntity
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveWelcomeUrl(ulong id, ulong channelId)
+        public async Task RemoveWelcomeUrl(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -292,7 +292,7 @@ namespace DatabaseEntity
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveWelcomeMessage(ulong id, ulong channelId)
+        public async Task RemoveWelcomeMessage(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -330,7 +330,7 @@ namespace DatabaseEntity
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveLeaveMessage(ulong id, ulong channelId)
+        public async Task RemoveLeaveMessage(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -369,7 +369,7 @@ namespace DatabaseEntity
             return await Task.FromResult(channelId);
         }
 
-        public async Task RemoveGuildUserMessageMention(ulong id, ulong channelId)
+        public async Task RemoveGuildUserMessageMention(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -408,7 +408,7 @@ namespace DatabaseEntity
             return await Task.FromResult(channelId);
         }
 
-        public async Task RemoveGuildRoleMessageMention(ulong id, ulong channelId)
+        public async Task RemoveGuildRoleMessageMention(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -436,7 +436,7 @@ namespace DatabaseEntity
             return await Task.FromResult(channelId);
         }
 
-        public async Task RemoveMessageMentionUser(ulong id, ulong channelId)
+        public async Task RemoveMessageMentionUser(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);
@@ -464,7 +464,7 @@ namespace DatabaseEntity
             return await Task.FromResult(channelId);
         }
 
-        public async Task RemoveMessageMentionRole(ulong id, ulong channelId)
+        public async Task RemoveMessageMentionRole(ulong id)
         {
             var channel = await _context.Servers
                 .FindAsync(id);

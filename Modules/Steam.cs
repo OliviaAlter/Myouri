@@ -12,12 +12,12 @@ namespace DiscordBot.Modules
     public class Steam : InteractiveBase<SocketCommandContext>
     {
         private readonly SteamClient _steamClient;
-        private readonly User _user;
+        private readonly Users _users;
 
-        public Steam(SteamClient steamClient, User user)
+        public Steam(SteamClient steamClient, Users users)
         {
             _steamClient = steamClient;
-            _user = user;
+            _users = users;
         }
 
         [Command("steam", RunMode = RunMode.Async)]
@@ -87,15 +87,5 @@ namespace DiscordBot.Modules
             }
         }
 
-        /*
-        [Command("player")]
-        public async Task GetPlayerFromGame(uint steamGame)
-        {
-            //try 440
-            await Context.Channel.
-                SendMessageAsync(
-                    $"{await _steamClient.NumberOfPlayerForGame(steamGame)} players");
-        }
-        */
     }
 }

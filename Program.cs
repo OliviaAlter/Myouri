@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DatabaseEntity;
@@ -66,7 +67,14 @@ namespace DiscordBot
                     services
                         .AddHostedService<CommandHandler>()
                         //.AddDbContext<Database>()
-                        .AddDbContext<Database>(options => options.UseMySql(context.Configuration["database"]))
+                        .AddDbContext<Database>
+                            (
+                            options => options.UseMySql
+                                (
+                                context.Configuration["database"],
+                                new MySqlServerVersion(new Version(8, 0, 21))
+                                )
+                            )
                         .AddSingleton<Servers>()
                         .AddSingleton<Ranks>()
                         .AddSingleton<Users>()

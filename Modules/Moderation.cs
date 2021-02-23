@@ -219,13 +219,39 @@ namespace DiscordBot.Modules
                 await Context.Channel.SendErrorAsync("Error", $"Error happened while removing {role.Mention}!");
             }
         }
+        [Command("clap")]
+        [RequireUserPermission(GuildPermission.BanMembers, ErrorMessage = "You are too big of a noob to clap people")]
+        public async Task Ban(IGuildUser user = null, [Remainder] string reason = null)
+        {
+            if (user == null)
+            {
+                await ReplyAsync("Specify a user plz");
+                return;
+            }
+
+            reason ??= "Not specified";
+
+            await Context.Guild.AddBanAsync(user, 6, reason);
+
+            var EmbedBuilder = new EmbedBuilder()
+                .WithColor(new Color(4, 219, 123))
+                .WithDescription($":white_check_mark: {user.Mention} was clapped\n**Reason: ** {reason}");
+            Embed embed = EmbedBuilder.Build();
+            await ReplyAsync(embed: embed);
+
+            var EmbedBuilderLog = new EmbedBuilder()
+                .WithColor(new Color(4, 219, 123))
+                .WithDescription($"{user.Mention} was clapped\n**Reason: ** {reason}\n**Moderator** {Context.User.Mention}");
+            Embed embedLog = EmbedBuilderLog.Build();
+            await Context.Channel.SendMessageAsync(embed: embedLog);
+        }
 
         [Command("kick", RunMode = RunMode.Async)]
         [Description("Kick someone's ass")]
         [Summary("Kick someone.")]
         [RequireBotPermission(GuildPermission.KickMembers)]
         [RequireBotPermission(GuildPermission.BanMembers)]
-        public async Task Kick(SocketUser userAccount, [Remainder] string reason = "")
+        public async Task Kick(SocketUser userAccount, [Remainder] string reason = null)
         {
             if (!(Context.User is SocketGuildUser userSend) || !userSend.GuildPermissions.ManageRoles ||
                 !Utils.CanInteractUser(userSend, (SocketGuildUser) userAccount))
@@ -234,12 +260,13 @@ namespace DiscordBot.Modules
                 return;
             }
 
+            reason ??= "Not specified";
             var builder = new EmbedBuilder();
 
             builder.WithTitle("Logged Information")
                 .AddField("User", $"{userAccount.Mention}")
                 .AddField("Command issued by", $"{userSend.Mention}")
-                .AddField("Reason", reason ?? "No reason provided")
+                .AddField("Reason", reason)
                 .WithDescription(
                     $"You can't kick this {userAccount} from {Context.Guild.Name}")
                 .WithFooter($"{Context.User.Username}", Context.User.GetAvatarUrl())

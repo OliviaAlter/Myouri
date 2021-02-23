@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseEntity
 {
@@ -14,10 +15,9 @@ namespace DatabaseEntity
         public DbSet<Rank> Ranks { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Autorole> Autoroles { get; set; }
-
         /*
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseMySql("Server=localhost;User=root;database=Discord;port=3306;Connect Timeout=5");
+            => options.UseMySql("Server=localhost;User=root;database=Discord;port=3306;Connect Timeout=5", new MySqlServerVersion(new Version(8, 0, 21)));
         */
     }
 

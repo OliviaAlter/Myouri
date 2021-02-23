@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using DatabaseEntity;
+﻿using DatabaseEntity;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Discord.Addons.Interactive;
 using DiscordBot.Utilities;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DiscordBot.Modules
 {
@@ -24,7 +24,7 @@ namespace DiscordBot.Modules
         [Summary("set welcome channel")]
         [Alias("wc")]
         [RequireBotPermission(GuildPermission.ManageChannels)]
-        public async Task SetWelcomeChannel(SocketChannel channel, string option = null, string value = null)
+        public async Task SetWelcomeChannel(SocketChannel channel = null)
         {
             if (!(Context.Channel is SocketGuildChannel)) return;
             if (!(Context.User is SocketGuildUser userSend)
@@ -34,7 +34,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetWelcomeChannel(Context.Guild.Id);
             if (channelLog == 0)
                 await _servers.SetWelcomeChannel(Context.Guild.Id, channel.Id);
@@ -56,7 +56,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetWelcomeChannel(Context.Guild.Id);
             if (channelLog == 0)
             {
@@ -66,7 +66,7 @@ namespace DiscordBot.Modules
 
             if (channel.Id == channelLog)
             {
-                await _servers.RemoveWelcomeChannel(Context.Guild.Id, channelLog);
+                await _servers.RemoveWelcomeChannel(Context.Guild.Id);
                 await ReplyAsync($"Removed channel <#{channelLog}> as welcome channel!");
             }
 
@@ -87,7 +87,7 @@ namespace DiscordBot.Modules
                     var answer = response.ToString().ToLower();
                     if (answer.Equals("yes") || answer.Equals("y"))
                     {
-                        await _servers.RemoveWelcomeChannel(Context.Guild.Id, channelLog);
+                        await _servers.RemoveWelcomeChannel(Context.Guild.Id);
                         await ReplyAsync($"Removed channel <#{channelLog}> as welcome channel!");
                     }
                     else if (answer.Equals("no") || answer.Equals("n"))
@@ -120,7 +120,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetLeftChannel(Context.Guild.Id);
             if (channelLog == 0)
                 await _servers.SetLeftChannel(Context.Guild.Id, channel.Id);
@@ -142,7 +142,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetLeftChannel(Context.Guild.Id);
             if (channelLog == 0)
             {
@@ -156,7 +156,7 @@ namespace DiscordBot.Modules
             }
             else
             {
-                await _servers.RemoveLeftChannel(Context.Guild.Id, channelLog);
+                await _servers.RemoveLeftChannel(Context.Guild.Id);
                 await ReplyAsync($"Removed channel <#{channel.Id}> as leave channel!");
             }
         }
@@ -175,7 +175,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetLeftChannel(Context.Guild.Id);
             if (channelLog == 0)
                 await _servers.SetLeftChannel(Context.Guild.Id, channel.Id);
@@ -197,7 +197,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetLeftChannel(Context.Guild.Id);
             if (channelLog == 0)
             {
@@ -211,7 +211,7 @@ namespace DiscordBot.Modules
             }
             else
             {
-                await _servers.RemoveLeftChannel(Context.Guild.Id, channelLog);
+                await _servers.RemoveLeftChannel(Context.Guild.Id);
                 await ReplyAsync($"Removed channel <#{channel.Id}> as User log channel!");
             }
         }

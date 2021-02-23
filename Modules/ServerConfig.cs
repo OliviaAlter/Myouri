@@ -291,7 +291,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??=  (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetLogMessageChannel(Context.Guild.Id);
             if (channelLog == 0)
                 await _servers.SetLogMessageChannel(Context.Guild.Id, channel.Id);
@@ -313,7 +313,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetLogMessageChannel(Context.Guild.Id);
             if (channelLog == 0)
             {
@@ -327,7 +327,7 @@ namespace DiscordBot.Modules
             }
             else
             {
-                await _servers.RemoveLogMessageChannel(Context.Guild.Id, channelLog);
+                await _servers.RemoveLogMessageChannel(Context.Guild.Id);
                 await ReplyAsync($"Removed channel <#{channel.Id}> as message log channel!");
             }
         }
@@ -345,7 +345,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetEventLogChannel(Context.Guild.Id);
             if (channelLog == 0)
                 await _servers.SetEventLogChannel(Context.Guild.Id, channel.Id);
@@ -367,7 +367,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetEventLogChannel(Context.Guild.Id);
             if (channelLog == 0)
             {
@@ -381,7 +381,7 @@ namespace DiscordBot.Modules
             }
             else
             {
-                await _servers.RemoveEventLogChannel(Context.Guild.Id, channelLog);
+                await _servers.RemoveEventLogChannel(Context.Guild.Id);
                 await ReplyAsync($"Removed channel <#{channel.Id}> as event log channel!");
             }
         }
@@ -399,7 +399,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetUserLogChannel(Context.Guild.Id);
             if (channelLog == 0)
                 await _servers.SetUserLogChannel(Context.Guild.Id, channel.Id);
@@ -421,7 +421,7 @@ namespace DiscordBot.Modules
                 return;
             }
 
-            channel = channel ?? (SocketGuildChannel) Context.Channel;
+            channel ??= (SocketGuildChannel) Context.Channel;
             var channelLog = await _servers.GetEventLogChannel(Context.Guild.Id);
             if (channelLog == 0)
             {
@@ -435,7 +435,7 @@ namespace DiscordBot.Modules
             }
             else
             {
-                await _servers.RemoveUserLogChannel(Context.Guild.Id, channelLog);
+                await _servers.RemoveUserLogChannel(Context.Guild.Id);
                 await ReplyAsync($"Removed channel <#{channel.Id}> as User log channel!");
             }
         }

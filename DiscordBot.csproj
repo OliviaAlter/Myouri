@@ -14,46 +14,46 @@
 
   <ItemGroup>
     <PackageReference Include="Discord.Addons.Hosting" Version="3.1.1" />
-    <PackageReference Include="Discord.Net" Version="2.3.0-dev-20201130.1" />
-    <PackageReference Include="Discord.Net.Commands" Version="2.3.0-dev-20201130.1" />
-    <PackageReference Include="Discord.Net.Core" Version="2.3.0-dev-20201130.1" />
-    <PackageReference Include="Discord.Net.Providers.WS4Net" Version="2.3.0-dev-20201130.1" />
-    <PackageReference Include="Discord.Net.Rest" Version="2.3.0-dev-20201130.1" />
-    <PackageReference Include="Discord.Net.Webhook" Version="2.3.0-dev-20201130.1" />
-    <PackageReference Include="Discord.Net.WebSocket" Version="2.3.0-dev-20201130.1" />
+    <PackageReference Include="Discord.Net" Version="2.3.1-dev-20210131.6" />
+    <PackageReference Include="Discord.Net.Commands" Version="2.3.1-dev-20210131.6" />
+    <PackageReference Include="Discord.Net.Core" Version="2.3.1-dev-20210131.6" />
+    <PackageReference Include="Discord.Net.Providers.WS4Net" Version="2.3.1-dev-20210131.6" />
+    <PackageReference Include="Discord.Net.Rest" Version="2.3.1-dev-20210131.6" />
+    <PackageReference Include="Discord.Net.Webhook" Version="2.3.1-dev-20210131.6" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="2.3.1-dev-20210131.6" />
     <PackageReference Include="Extensions.Configuration" Version="0.0.4" />
     <PackageReference Include="GiphyDotNet" Version="2.0.0" />
-    <PackageReference Include="JikanDotNet" Version="1.5.3" />
+    <PackageReference Include="JikanDotNet" Version="1.5.4" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0-rc.1.20451.14" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0-rc.1.20451.14" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0-rc.2.20475.5" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.10" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0-rc.2.20475.5" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.0-preview-20210115-03" />
     <PackageReference Include="Nekos.Net" Version="1.0.2" />
-    <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.1" />
+    <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.1.0" />
     <PackageReference Include="NHentai.NET" Version="3.2.0" />
     <PackageReference Include="NHentaiAPI" Version="1.4.0" />
     <PackageReference Include="NHentaiSharp" Version="1.1.1" />
     <PackageReference Include="OpenDota.NET" Version="2.2.0" />
     <PackageReference Include="OsuSharp" Version="5.4.4" />
     <PackageReference Include="OsuSharp.Analyzer" Version="5.4.4" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.3" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.2" />
     <PackageReference Include="PuppeteerSharp" Version="2.0.4" />
     <PackageReference Include="SharpNao" Version="1.0.0" />
-    <PackageReference Include="SteamWebAPI2" Version="4.2.6" />
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="5.0.0-rc.1.20451.14" />
+    <PackageReference Include="SteamWebAPI2" Version="4.2.7" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="5.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
-    <PackageReference Include="Victoria" Version="5.1.10" />
+    <PackageReference Include="Victoria" Version="5.1.11" />
     <PackageReference Include="Weeb.net" Version="1.0.7" />
   </ItemGroup>
 

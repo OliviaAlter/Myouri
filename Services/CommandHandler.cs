@@ -12,6 +12,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBot.Extension;
 using DiscordBot.Utilities;
+using Microsoft.VisualBasic;
 
 namespace DiscordBot.Services
 {
@@ -49,7 +50,7 @@ namespace DiscordBot.Services
 
             _client.MessageDeleted += OnMessageDeleted;
             _client.MessageUpdated += OnMessageUpdated;
-            //_client.GuildMemberUpdated += OnGuildMemberUpdated;
+            _client.GuildMemberUpdated += OnGuildMemberUpdated;
 
             _client.UserJoined += OnUserJoined;
             _client.UserLeft += OnUserLeft;
@@ -74,7 +75,7 @@ namespace DiscordBot.Services
             _service.CommandExecuted += OnCommandExecuted;
 
             _client.Ready += OnReady;
-            //await _client.GetRecommendedShardCountAsync();
+            await _client.GetRecommendedShardCountAsync();
             await _service.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);
         }
 
@@ -269,6 +270,7 @@ namespace DiscordBot.Services
 
         private async Task UserJoinedHandler(SocketGuildUser joinUser)
         {
+            Console.WriteLine(joinUser.Username);
             var guildId = await _servers.GetWelcomeChannel(joinUser.Guild.Id);
             var path = await _imageService.CreateImageAsync(joinUser);
 

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using DatabaseEntity;
@@ -17,7 +18,9 @@ using DiscordBot.Extension;
 using DiscordBot.Model;
 using DiscordBot.Services;
 using DiscordBot.Utilities;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DiscordBot.Modules
 {
@@ -117,23 +120,252 @@ namespace DiscordBot.Modules
             await ReplyAsync(embed: builder.Build());
         }
 
+        [Command("user")]
+            public async Task Users(string name)
+            {
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("product",
+                    "1")); // set your own values here
+
+                client.BaseAddress = new Uri("https://api.github.com/");
+
+                if (name == null)
+                {
+                    await ReplyAsync("Please enter a username");
+                    return;
+                }
+
+                var result = await client.GetStringAsync($"users/{name}");
+
+                if (result == null) return;
+
+                var githubinfo = JObject.Parse(result);
+
+                var embed = new EmbedBuilder
+                {
+                    Author = new EmbedAuthorBuilder
+                    {
+                        Name = githubinfo["login"].ToString(),
+                        Url = githubinfo["html_url"].ToString(),
+                        IconUrl = githubinfo["avatar_url"].ToString()
+                    },
+                    Fields = new List<EmbedFieldBuilder>
+                    {
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Username",
+                            Value = githubinfo["login"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Public Repos",
+                            Value = githubinfo["public_repos"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Public Gists",
+                            Value = githubinfo["public_gists"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Company",
+                            Value = githubinfo["company"],
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Website",
+                            Value = githubinfo["blog"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Bio",
+                            Value = githubinfo["bio"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Last Activity",
+                            Value = DateTime.Parse(githubinfo["updated_at"].ToString()).ToString("g"),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Created At",
+                            Value = DateTime.Parse(githubinfo["created_at"].ToString()).ToString("g"),
+                            IsInline = true
+                        }
+                    },
+                    ThumbnailUrl = githubinfo["avatar_url"].ToString(),
+                    Color = Color.Blue
+                };
+                await ReplyAsync(embed: embed.Build());
+            }
+
+            [Command("org")]
+            public async Task Org(string name)
+            {
+                var client = new HttpClient();
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("product",
+                    "1")); // set your own values here
+
+                client.BaseAddress = new Uri("https://api.github.com/");
+
+                if (name == null)
+                {
+                    await ReplyAsync("Please enter a org name");
+                    return;
+                }
+
+                var result = await client.GetStringAsync($"org/{name}");
+
+                if (result == null) return;
+
+                var githubinfo = JObject.Parse(result);
+
+                var embed = new EmbedBuilder
+                {
+                    Author = new EmbedAuthorBuilder
+                    {
+                        Name = githubinfo["login"].ToString(),
+                        Url = githubinfo["html_url"].ToString(),
+                        IconUrl = githubinfo["avatar_url"].ToString()
+                    },
+                    Fields = new List<EmbedFieldBuilder>
+                    {
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Username",
+                            Value = githubinfo["login"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Public Repos",
+                            Value = githubinfo["public_repos"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Public Gists",
+                            Value = githubinfo["public_gists"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Company",
+                            Value = githubinfo["company"],
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Website",
+                            Value = githubinfo["blog"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Bio",
+                            Value = githubinfo["bio"].ToString(),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Last Activity",
+                            Value = DateTime.Parse(githubinfo["updated_at"].ToString()).ToString("g"),
+                            IsInline = true
+                        },
+                        new EmbedFieldBuilder
+                        {
+                            Name = "Created At",
+                            Value = DateTime.Parse(githubinfo["created_at"].ToString()).ToString("g"),
+                            IsInline = true
+                        }
+                    },
+                    ThumbnailUrl = githubinfo["avatar_url"].ToString(),
+                    Color = Color.Blue
+                };
+                await ReplyAsync(embed: embed.Build());
+            }
+
         [Command("info", RunMode = RunMode.Async)]
         [Summary("Get your information")]
         [RequireContext(ContextType.Guild)]
         public async Task Info(SocketGuildUser user = null)
         {
-            user = (SocketGuildUser)(user ?? (IGuildUser)Context.User);
-            var builder = new EmbedBuilder();
-            builder.WithThumbnailUrl(user.GetAvatarUrl() ?? user.GetDefaultAvatarUrl())
-                .WithDescription($"Basic information about {user.Mention}!")
-                .WithColor(new Color(Utils.RandomColor(), Utils.RandomColor(), Utils.RandomColor()))
-                .AddField("User ID: ", user.Id, true)
-                .AddField("Created at ", user.CreatedAt.ToString("dd/MM/yyyy"), true)
-                .AddField("Joined at", user.JoinedAt?.ToString("dd/MM/yyyy"), true)
-                .AddField("Roles", string.Join(", ", user.Roles.Where(x => !x.IsEveryone).Select(x => x.Mention)))
-                .WithCurrentTimestamp()
-                .WithAuthor(Context.User);
-            await ReplyAsync(embed: builder.Build());
+            user = (SocketGuildUser)(user ?? Context.User);
+            if (user.IsBot)
+            {
+                await ReplyAsync("Bots are not people :D");
+                return;
+            }
+
+            var embed = new EmbedBuilder { ThumbnailUrl = user.GetAvatarUrl() }
+                .AddField("Member ID", user.Id, true)
+                .AddField("Status", user.Status, true)
+                .AddField("Joined Guild", user.JoinedAt?.ToString("dd MMMM, yyyy"), true)
+                .AddField("Account Created", user.CreatedAt.ToString("dd MMMM, yyyy"), true)
+                .AddField("Roles", user.Roles.Count - 1, true)
+                .WithTimestamp(DateTimeOffset.Now)
+                .WithAuthor(x =>
+                {
+                    x.Name = user.Username;
+                    x.IconUrl = user.GetAvatarUrl();
+                    x.Url = "https://thwr.tech/";
+                })
+                .WithFooter(x =>
+                {
+                    x.Text = $"Requested By {Context.User.Username}";
+                    x.IconUrl = Context.User.GetAvatarUrl();
+                })
+                .WithColor(Color.Red);
+
+            if (user.Activity != null)
+            {
+                switch (user.Activity)
+                {
+                    case SpotifyGame spot:
+                        embed.AddField("Listening To", "Spotify", true)
+                            .AddField("Track", spot.TrackTitle, true)
+                            .AddField("Artist(s)", string.Join(", ", spot.Artists), true)
+                            .AddField("Album", spot.AlbumTitle, true)
+                            .WithThumbnailUrl(spot.AlbumArtUrl)
+                            .WithColor(Color.Green);
+                        break;
+                    case CustomStatusGame statusGame:
+                        embed.AddField("Activity", statusGame.Name, true)
+                            .AddField("Details", statusGame.Details, true)
+                            .AddField("Playing Since", statusGame.CreatedAt, true)
+                            .WithColor(Color.Magenta);
+                        break;
+                    case RichGame richGame:
+                        embed.AddField("Activity", richGame.Name, true)
+                            .AddField("Details", richGame.Details, true)
+                            .AddField("Playing Since", richGame.Timestamps.Start?.ToString("hh:mm:ss tt"), true)
+                            .AddField("Time Playing",
+                                (DateTimeOffset.Now - richGame.Timestamps.Start)?.ToString(@"hh\:mm\:ss"), true)
+                            .WithThumbnailUrl(richGame.SmallAsset.GetImageUrl() ?? user.GetAvatarUrl())
+                            .WithColor(Color.Gold);
+                        break;
+                    default:
+                        embed.AddField("Activity", user.Activity.Name ?? "None", true);
+                        break;
+                }
+            }
+            else
+            {
+                embed.AddField("Activity", "None", true);
+            }
+
+            await ReplyAsync(embed: embed.Build());
         }
 
         [Command("bot", RunMode = RunMode.Async)]
